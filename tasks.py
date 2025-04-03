@@ -84,11 +84,11 @@ class AdTechTasks:
                 2. Determine which AI-powered features they can access (Conversion, Budgeting, Bidding, Personalization).
                 3. Apply any necessary restrictions based on their plan.
                 4. Pass the {campaign_data} to the appropriate AI agent for execution.
+                
             """),
             expected_output=dedent(f"""
-                The campaign data is validated, and access is granted.
-                The data is successfully passed to the selected AI agent for execution.
+                - The campaign data is validated, and access is granted.
+                - The data is successfully passed to the selected AI agent for execution.
             """),
             agent=agent,
-
         )

@@ -1,11 +1,12 @@
 import os
+import json
 
 os.environ["CREWAI_DISABLE_ANALYTICS"] = "true"
 from crewai import Crew
 from textwrap import dedent
 from agents import AdTechAgents
 from tasks import AdTechTasks
-from langchain.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchRun
 
 # Initialize search tool (if needed)
 search_tool = DuckDuckGoSearchRun()
@@ -18,7 +19,6 @@ os.environ["OPENAI_ORGANIZATION"] = os.getenv("OPENAI_ORGANIZATION_ID", "default
 class CustomCrew:
     def __init__(self, campaign_data):
         self.campaign_data = campaign_data
-
 
     def run(self):
         # Initialize agent and task classes
@@ -47,7 +47,10 @@ class CustomCrew:
         )
 
         result = crew.kickoff()
-        return result
+
+        # Convert result to JSON format
+        final_result = json.dumps(result, indent=4)  # Format the result as a JSON string
+        return final_result
 
 
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
 from crewai import Agent
 from textwrap import dedent
 from langchain_openai import ChatOpenAI
-from langchain.llms import Ollama
+from langchain_community.llms import Ollama
 from dotenv import load_dotenv
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -127,5 +128,4 @@ class AdTechAgents:
             allow_delegation=True,
             verbose=True,
             llm=self.OpenAIGPT35,
-
         )

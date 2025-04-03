@@ -2,8 +2,12 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
 import logging
-from main import CustomCrew  # Ensure this imports your CrewAI implementation
+
+from starlette.responses import JSONResponse
+
+from main import CustomCrew
 import json
+from typing import Union, List # to set multiple target countries
 
 # Initialize FastAPI app
 app = FastAPI(title="AdBirt AI Campaign Analysis API", version="1.0")
@@ -26,7 +30,7 @@ class CampaignRequest(BaseModel):
     daily_ad_budget: float
     start_date: str
     end_date: str
-    target_country: str
+    target_country: Union[str, List[str]]  # Can be either a string or a list of strings
     media_url: str
 
 
@@ -64,35 +68,16 @@ async def analyze_campaign(campaign_request: CampaignRequest):
 
     try:
         ai_crew = CustomCrew(campaign_data)
-        analysis = ai_crew.run()  # Run AI analysis
+        final_result = ai_crew.run()  # Get the full analysis result
 
-        # ✅ DEBUG: Check AI response format
-        print(f"DEBUG: AI Crew Output - {analysis}")
-
-        # ✅ Ensure response is a dictionary
-        if isinstance(analysis, str):
+        # Ensure response is a valid JSON object
+        if isinstance(final_result, str):
             try:
-                analysis = json.loads(analysis)
+                final_result = json.loads(final_result)
             except json.JSONDecodeError:
-                raise HTTPException(status_code=500, detail=f"Invalid response format from AI crew: {analysis}")
-        elif not isinstance(analysis, dict):
-            raise HTTPException(status_code=500, detail=f"Unexpected AI crew response type: {type(analysis)}")
+                raise HTTPException(status_code=500, detail=f"Invalid response format from AI crew: {final_result}")
 
-        # **Extract only the selected agent's output**
-        response_data = {"status": "success"}
-
-        if campaign_request.agent_selected == "conversion_prediction":
-            response_data["conversion_prediction"] = analysis.get("conversion_prediction", "No data available")
-        elif campaign_request.agent_selected == "budget_allocation":
-            response_data["budget_suggestion"] = analysis.get("budget_suggestion", "No data available")
-        elif campaign_request.agent_selected == "bid_optimization":
-            response_data["bid_strategy"] = analysis.get("bid_strategy", "No data available")
-        elif campaign_request.agent_selected == "ad_personalization":
-            response_data["personalization_notes"] = analysis.get("personalization_notes", "No data available")
-        else:
-            response_data["message"] = "Invalid agent selection"
-
-        return response_data
+        return JSONResponse(content={"status": "success", "data": final_result}, status_code=200)
 
     except Exception as e:
         logger.error(f"Error analyzing campaign: {str(e)}")
