@@ -13,7 +13,7 @@ This API provides AI-powered insights for digital advertising campaigns, offerin
 
 ## Subscription Tiers
 
-There is a dedicated tier management agent that works with the  different feature sets based on the user's subscription plan:
+The API supports different feature sets based on the user's subscription plan:
 
 - **Basic Plan ($5/month)**: Conversion Prediction, Budget Allocation
 - **Pro Plan ($9/month)**: Ad Personalization, Conversion Prediction, Budget Allocation, Priority Support
@@ -37,46 +37,37 @@ Analyzes campaign data based on the selected agent and user tier.
 #### Request Format
 ```json
 {
-  "user_tier": "Basic",
+  "user_tier": "premium",
   "agent_selected": "conversion_prediction",
-  "campaign_name": "Trendluxe Spring Collection",
-  "campaign_objective": "Boost sales for new fashion line",
-  "campaign_description": "Launching a new luxury fashion collection targeting high-end customers.",
-  "campaign_destination": "https://trendluxe.com/spring-collection",
+  "campaign_name": "Summer Sales Boost",
+  "campaign_objective": "Increase conversions",
+  "campaign_description": "A campaign to promote summer deals",
+  "campaign_destination": "https://example.com/summer-sale",
   "banner_size": "300x250",
-  "banner_type": "Static",
-  "daily_ad_budget": 50.00,
+  "banner_type": "static",
+  "daily_ad_budget": 500.0,
   "start_date": "2025-04-01",
   "end_date": "2025-04-30",
-  "target_country": "United States",
-  "media_url": "https://trendluxe.com/banner.jpg"
+  "target_country": ["US", "UK", "Canada"],
+  "media_url": "https://example.com/banner.jpg"
 }
 ```
 
 #### Response Format
-Depending on the agent selected, the response will contain different fields:
+The API returns responses in the following format:
 
-**Conversion Prediction**:
 ```json
 {
   "status": "success",
-  "conversion_prediction": {
-    "probability": 67.5,
-    "factors": [...],
-    "recommendations": [...]
-  }
+  "data": "Detailed analysis content based on the agent selected"
 }
 ```
 
-**Budget Allocation**:
+**Example Response (Ad Personalization)**:
 ```json
 {
   "status": "success",
-  "budget_suggestion": {
-    "current_inefficiencies": [...],
-    "optimized_allocation": [...],
-    "expected_roi_improvement": "15%"
-  }
+  "data": "**Ad Personalization Report for the \"Summer Sales Boost\" Campaign**\n\n**1. Recommended Creative Variations:**\n- **Dynamic Imagery:** Incorporate dynamic elements in the static banner, such as rotating images of various summer products, to capture different interests within the audience.\n- **Localized Content:** Create variations of the ad that include localized images or references to cultural symbols relevant to the US, UK, and Canada. For instance, featuring iconic summer locations or events from each country.\n- **Personalized Messaging:** Use personalized text overlays that address the specific audience segment, such as \"Enjoy Summer in [Country] with Our Exclusive Deals!\"\n\n**2. Expected Engagement Improvements:**\n- By integrating dynamic imagery and localized content, we anticipate an increase in engagement by approximately 15-20%, as these elements resonate more effectively with the audience's cultural and personal preferences.\n- Personalized messaging is expected to enhance the click-through rate (CTR) from 1.5% to potentially 2.0%, improving the overall interaction with the ad.\n\n**3. AI-Driven Insights for Content Tailoring:**\n- **User Behavior Analysis:** Utilize AI tools to analyze user interaction data, identifying patterns that can inform future creative adjustments. For instance, if a particular product image receives higher engagement, prioritize it in future ads.\n- **Sentiment Analysis:** Implement AI-driven sentiment analysis on feedback or comments related to the campaign to gauge audience reactions and adapt the messaging accordingly.\n- **Predictive Engagement Models:** Deploy AI models to predict which creative elements are likely to perform best based on historical data and current trends, allowing for proactive adjustments.\n\n**4. Creative Insights for Better Engagement:**\n- **Color Psychology:** Use bright, summer-themed colors that evoke a sense of excitement and urgency, encouraging users to engage with the ad.\n- **Call-to-Action (CTA) Optimization:** Test different CTAs, such as \"Shop Now,\" \"Discover Deals,\" or \"Uncover Savings,\" to determine which generates the highest response rate.\n- **Visual Hierarchy:** Ensure that the most critical information, such as discounts or limited-time offers, is prominently displayed to capture attention immediately.\n\nBy implementing these personalized ad variations and leveraging AI-driven insights, the \"Summer Sales Boost\" campaign is poised to significantly enhance its engagement and conversion rates. This approach not only aligns with the campaign's objective to increase conversions but also maximizes the effectiveness of the allocated budget, ensuring a robust return on investment."
 }
 ```
 
@@ -85,25 +76,59 @@ Depending on the agent selected, the response will contain different fields:
 ### Prerequisites
 - Python 3.8+
 - OpenAI API key
-- DuckDuckGo search tool (optional)
+- Git
 
-### Environment Variables
+### Installation Guide
+
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/adbirt/Adbirt-Campaign-Optimizer.git
+cd Adbirt-Campaign-Optimizer
+```
+
+#### 2. Set Up a Virtual Environment
+```bash
+# Create a virtual environment
+python -m venv env
+
+# Activate the virtual environment
+# On Windows:
+env\Scripts\activate
+# On macOS/Linux:
+source env/bin/activate
+```
+
+#### 3. Upgrade Package Management Tools
+```bash
+pip install --upgrade pip setuptools wheel
+```
+
+#### 4. Install Core Dependencies
+```bash
+pip install crewai fastapi uvicorn openai langchain langchain-openai
+```
+
+#### 5. Install Additional Dependencies
+```bash
+pip install pydantic python-dotenv tiktoken requests
+```
+
+#### 6. Install Search Tool
+```bash
+pip install -U duckduckgo-search
+```
+
+#### 7. Set Up Environment Variables
 Create a `.env` file in the project root with the following variables:
 ```
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_ORGANIZATION_ID=your_organization_id
 ```
 
-### Installation
-1. Clone the repository
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-3. Run the server:
-   ```
-   uvicorn api:app --reload
-   ```
+#### 8. Run the Server
+```bash
+uvicorn api:app --reload
+```
 
 ## Example Usage
 
@@ -113,19 +138,19 @@ OPENAI_ORGANIZATION_ID=your_organization_id
 curl -X POST "http://localhost:8000/campaign/analyze/" \
      -H "Content-Type: application/json" \
      -d '{
-          "user_tier": "Basic",
+          "user_tier": "premium",
           "agent_selected": "conversion_prediction",
-          "campaign_name": "Trendluxe Spring Collection",
-          "campaign_objective": "Boost sales for new fashion line",
-          "campaign_description": "Launching a new luxury fashion collection targeting high-end customers.",
-          "campaign_destination": "https://trendluxe.com/spring-collection",
+          "campaign_name": "Summer Sales Boost",
+          "campaign_objective": "Increase conversions",
+          "campaign_description": "A campaign to promote summer deals",
+          "campaign_destination": "https://example.com/summer-sale",
           "banner_size": "300x250",
-          "banner_type": "Static",
-          "daily_ad_budget": 50.00,
+          "banner_type": "static",
+          "daily_ad_budget": 500.0,
           "start_date": "2025-04-01",
           "end_date": "2025-04-30",
-          "target_country": "United States",
-          "media_url": "https://trendluxe.com/banner.jpg"
+          "target_country": ["US", "UK", "Canada"],
+          "media_url": "https://example.com/banner.jpg"
         }'
 ```
 
@@ -138,19 +163,19 @@ import json
 url = "http://localhost:8000/campaign/analyze/"
 headers = {"Content-Type": "application/json"}
 payload = {
-    "user_tier": "Basic",
+    "user_tier": "premium",
     "agent_selected": "conversion_prediction",
-    "campaign_name": "Trendluxe Spring Collection",
-    "campaign_objective": "Boost sales for new fashion line",
-    "campaign_description": "Launching a new luxury fashion collection targeting high-end customers.",
-    "campaign_destination": "https://trendluxe.com/spring-collection",
+    "campaign_name": "Summer Sales Boost",
+    "campaign_objective": "Increase conversions",
+    "campaign_description": "A campaign to promote summer deals",
+    "campaign_destination": "https://example.com/summer-sale",
     "banner_size": "300x250",
-    "banner_type": "Static",
-    "daily_ad_budget": 50.00,
+    "banner_type": "static",
+    "daily_ad_budget": 500.0,
     "start_date": "2025-04-01",
     "end_date": "2025-04-30",
-    "target_country": "United States",
-    "media_url": "https://trendluxe.com/banner.jpg"
+    "target_country": ["US", "UK", "Canada"],
+    "media_url": "https://example.com/banner.jpg"
 }
 
 response = requests.post(url, headers=headers, data=json.dumps(payload))
@@ -162,19 +187,23 @@ print(response.json())
 The system is built on these core components:
 - **FastAPI**: Handles HTTP requests and responses
 - **CrewAI**: Orchestrates the AI agents working together
-- **OpenAI Models**: Powers the AI capabilities (GPT-3.5-Turbo, GPT-4o-Mini, GPT-4o)
+- **OpenAI Models**: Powers the AI capabilities
+  - GPT-3.5-Turbo: Used for basic tier management
+  - GPT-4o-Mini: Powers conversion prediction, budget allocation, and bid optimization
+  - GPT-4o: Powers advanced ad personalization features
 
-## Error Handling
+## Troubleshooting
 
-The API returns appropriate HTTP status codes:
-- 200: Successful operation
-- 405: Method not allowed
-- 500: Internal server error with details
+Common issues and solutions:
 
-## Logging
+1. **API Key Authentication Errors**:
+   - Ensure your `.env` file has the correct OpenAI API key
+   - Check that the environment variables are properly loaded
 
-The system uses Python's built-in logging module configured at the INFO level.
+2. **Dependency Conflicts**:
+   - Use a dedicated virtual environment
+   - Follow the installation steps in the correct order
 
-## License
-
-MIT
+3. **Server Won't Start**:
+   - Check for port conflicts (default is 8000)
+   - Ensure all dependencies are correctly installed
