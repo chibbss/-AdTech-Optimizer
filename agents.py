@@ -103,11 +103,10 @@ class AdTechAgents:
                   - Conversion Prediction  
                   - Budget Allocation  
 
-                - **Pro Plan ($9/month):**  
-                  - Ad Personalization  
+                - **Pro Plan ($9/month):**    
                   - Conversion Prediction  
                   - Budget Allocation  
-                  - Priority Support  
+                
 
                 - **Advanced Plan ($10.99/month):**  
                   - Conversion Prediction  

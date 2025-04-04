@@ -68,14 +68,21 @@ async def analyze_campaign(campaign_request: CampaignRequest):
 
     try:
         ai_crew = CustomCrew(campaign_data)
-        final_result = ai_crew.run()  # Get the full analysis result
+        final_result = ai_crew.run()
 
-        # Ensure response is a valid JSON object
+        # If it's a custom class (like CrewOutput), force it into a dict
+        if hasattr(final_result, "dict"):
+            final_result = final_result.dict()
+        elif hasattr(final_result, "__dict__"):
+            final_result = final_result.__dict__
+
+        # If it's a string, try parsing it
         if isinstance(final_result, str):
             try:
                 final_result = json.loads(final_result)
             except json.JSONDecodeError:
-                raise HTTPException(status_code=500, detail=f"Invalid response format from AI crew: {final_result}")
+                raise HTTPException(status_code=500,
+                                    detail=f"Invalid JSON string returned from AI crew: {final_result}")
 
         return JSONResponse(content={"status": "success", "data": final_result}, status_code=200)
 

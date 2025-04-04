@@ -16,7 +16,7 @@ This API provides AI-powered insights for digital advertising campaigns, offerin
 The API supports different feature sets based on the user's subscription plan:
 
 - **Basic Plan ($5/month)**: Conversion Prediction, Budget Allocation
-- **Pro Plan ($9/month)**: Ad Personalization, Conversion Prediction, Budget Allocation, Priority Support
+- **Pro Plan ($9/month)**: Conversion Prediction, Budget Allocation
 - **Advanced Plan ($10.99/month)**: Conversion Prediction, Bid Optimization, Budget Allocation
 - **Enterprise Plan ($12.99/month)**: Ad Personalization, Conversion Prediction, AI-Driven Recommendation, Account Management, Budget Allocation
 
